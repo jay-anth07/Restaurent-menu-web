@@ -1,4 +1,4 @@
-##🌶️ Dakshin Delights - Restaurant Menu Application
+#🌶️ Dakshin Delights - Restaurant Menu Application
 
 A modern, responsive, single-page web application for a South Indian restaurant. This project features a visually appealing user interface with dynamic category filtering, search functionality, and a fully interactive slide-out shopping cart.
 
@@ -53,7 +53,7 @@ Ensure all of your .jpg, .jpeg, and .webp food images (e.g., Avial.webp, Dosa.jp
 Run the Application:
 Simply double-click the index.html file to open it in your default web browser. No local server is strictly required, though you can use VS Code's "Live Server" extension for the best development experience.
 
-##📁 Project Structure
+#📁 Project Structure
 
 Since this is a lightweight, single-page application, all HTML, CSS, JavaScript logic, and mock JSON data are contained efficiently within a single file to make deployment and hosting incredibly easy.
 
