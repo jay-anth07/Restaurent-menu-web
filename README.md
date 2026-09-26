@@ -44,7 +44,7 @@ Installation & Setup
 
 Clone the repository (or download the ZIP file):
 
-git clone https://github.com/yourusername/dakshin-delights-menu.git
+git clone git clone https://github.com/jay-anth07/Restaurent-menu-web.git
 
 
 Image Placement (Crucial Step):
@@ -57,11 +57,11 @@ Simply double-click the index.html file to open it in your default web browser. 
 
 Since this is a lightweight, single-page application, all HTML, CSS, JavaScript logic, and mock JSON data are contained efficiently within a single file to make deployment and hosting incredibly easy.
 
-├── index.html           # Main application file (HTML, Tailwind config, jQuery logic)
-├── Avial.webp           # Local image assets...
-├── Dosa.jpg             
-├── Veg-Biryani.jpg      
-└── README.md            # Project documentation
+├── index.html              # Main application file (HTML, Tailwind config, jQuery logic)
+├── Non-Veg-items           # Local image assets...
+├── Tiffin-items             
+├── Veg-food-items      
+└── README.md               # Project documentation
 
 
 🤝 Contributing
