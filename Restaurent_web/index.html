@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dakshin Delights | Authentic South Indian Cuisine</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        spice: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                        },
+                        leaf: {
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        },
+                        earth: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            800: '#292524',
+                            900: '#1c1917',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f5f5f4; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+        
+        /* Animations */
+        .slide-in-right { transform: translateX(100%); transition: transform 0.3s ease-in-out; }
+        .slide-in-right.open { transform: translateX(0); }
+        .toast { animation: slideUpFade 0.3s forwards, fadeOutDown 0.3s 2.7s forwards; }
+        
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOutDown {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(20px); }
+        }
+
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-earth-50 text-earth-800 font-sans antialiased">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full bg-white shadow-sm z-40 border-b border-earth-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" id="logo-btn">
+                    <i class="fa-solid fa-leaf text-leaf-600 text-2xl mr-2"></i>
+                    <span class="font-serif font-bold text-2xl text-spice-600 tracking-tight">Dakshin Delights</span>
+                </div>
+                
+                <!-- Search & Cart -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden md:block">
+                        <input type="text" id="nav-search" placeholder="Search menu..." class="w-64 pl-10 pr-4 py-2 rounded-full border border-earth-200 focus:outline-none focus:ring-2 focus:ring-spice-500 focus:border-transparent text-sm bg-earth-50">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-magnifying-glass text-earth-400"></i>
+                        </div>
+                    </div>
+                    
+                    <button id="cart-btn" class="relative p-2 text-earth-600 hover:text-spice-600 transition-colors">
+                        <i class="fa-solid fa-cart-shopping text-xl"></i>
+                        <span id="cart-counter" class="absolute top-0 right-0 -mt-1 -mr-1 flex h-5 w-5 items-center justify-center rounded-full bg-spice-600 text-xs font-bold text-white shadow-sm transform scale-0 transition-transform duration-200">0</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Search -->
+            <div class="pb-3 md:hidden">
+                <div class="relative">
+                    <input type="text" id="mobile-search" placeholder="Search menu..." class="w-full pl-10 pr-4 py-2 rounded-full border border-earth-200 focus:outline-none focus:ring-2 focus:ring-spice-500 text-sm bg-earth-50">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-magnifying-glass text-earth-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-24 md:pt-20 pb-16 min-h-screen flex flex-col">
+        
+        <!-- Hero Header -->
+        <div class="bg-spice-600 text-white py-12 px-4 text-center">
+            <h1 class="font-serif text-4xl md:text-5xl font-bold mb-4">A Taste of the South</h1>
+            <p class="text-spice-100 max-w-2xl mx-auto text-lg">Experience the authentic flavors, warm spices, and culinary traditions of South India.</p>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="sticky top-16 z-30 bg-earth-50 border-b border-earth-200 shadow-sm md:top-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex overflow-x-auto py-4 space-x-2 no-scrollbar" id="category-filters">
+                    <button data-filter="all" class="filter-btn active px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-spice-600 text-white shadow-sm transition-colors">All Menu</button>
+                    <button data-filter="veg" class="filter-btn px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white text-earth-600 border border-earth-200 hover:bg-earth-100 transition-colors flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-leaf-600 mr-2"></span> Pure Veg
+                    </button>
+                    <button data-filter="non-veg" class="filter-btn px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white text-earth-600 border border-earth-200 hover:bg-earth-100 transition-colors flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-red-600 mr-2"></span> Non-Veg
+                    </button>
+                    <button data-filter="tiffin" class="filter-btn px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-white text-earth-600 border border-earth-200 hover:bg-earth-100 transition-colors flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-yellow-500 mr-2"></span> Tiffins
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+            <div id="no-results" class="hidden text-center py-16">
+                <i class="fa-solid fa-plate-wheat text-4xl text-earth-300 mb-4"></i>
+                <h3 class="text-xl font-medium text-earth-600">No dishes found</h3>
+                <p class="text-earth-500 mt-2">Try adjusting your search or filter criteria.</p>
+                <button id="clear-search-btn" class="mt-4 text-spice-600 font-medium hover:underline">Clear Search</button>
+            </div>
+            
+            <div id="menu-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Cards will be injected here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Cart Overlay & Sidebar -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden transition-opacity opacity-0"></div>
+
+    <div id="cart-sidebar" class="slide-in-right fixed inset-y-0 right-0 z-50 w-full md:w-96 bg-white shadow-2xl flex flex-col">
+        <div class="px-6 py-4 border-b border-earth-100 flex justify-between items-center bg-earth-50">
+            <h2 class="text-xl font-bold font-serif text-earth-800 flex items-center">
+                <i class="fa-solid fa-cart-shopping text-spice-600 mr-2"></i> Your Order
+            </h2>
+            <button id="close-cart-btn" class="text-earth-400 hover:text-earth-800 transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        
+        <div id="cart-items-container" class="flex-grow overflow-y-auto p-6 space-y-4">
+            <!-- Items injected here -->
+        </div>
+        
+        <div class="border-t border-earth-100 p-6 bg-earth-50">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-earth-600 font-medium">Subtotal</span>
+                <span class="text-xl font-bold text-earth-800">₹<span id="cart-total">0.00</span></span>
+            </div>
+            <button id="checkout-btn" disabled class="w-full bg-spice-600 hover:bg-spice-700 disabled:bg-earth-300 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg shadow-md transition-colors flex justify-center items-center">
+                <span>Place Order</span>
+                <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <script>
+        // --- 1. Map precise filenames provided by user ---
+        const specificImages = {
+            // Veg (10)
+            "Avial": "Avial.webp",
+            "Bisi Bele Bath": "Bisi Bele Bath.jpg",
+            "Curd Rice": "Curd Rice.jpg",
+            "Gutti Vankaya Kura": "Gutti Vankaya Kura.jpeg",
+            "Sambar Rice": "Sambar Rice.jpeg",
+            "Veg Kurma": "Veg Kurma.jpeg",
+            "Veg Biryani": "Veg-Biryani.jpg",
+            "Lemon Rice": "Lemon Rice.jpg",
+            "Pongal": "Pongal.jpg",
+            "Mirchi Ka Salan": "Mirchi Ka Salan.jpg",
+            
+            // Non-Veg (10)
+            "Chicken Chettinad": "Chicken Chettinad.jpg",
+            "Mutton Sukka": "Mutton Sukka.jpg",
+            "Chicken 65": "Chicken 65.jpg",
+            "Fish Curry": "Fish Curry.jpg",
+            "Prawn Ghee Roast": "Prawn Ghee Roast.jpg",
+            "Andhra Chilli Chicken": "Andhra Chilli Chicken.jpg",
+            "Hyderabadi Chicken Biryani": "Hyderabadi Chicken Biryani.jpg",
+            "Mutton Biryani": "Mutton Biryani.jpg",
+            "Kerala Beef Fry": "Kerala Beef Fry.jpg",
+            "Egg Roast": "Egg Roast.jpg",
+            
+            // Tiffins (10)
+            "Idli": "Idli.jpg",
+            "Dosa": "Dosa.jpg",
+            "Masala Dosa": "Masala Dosa.jpg",
+            "Vada": "Vada.jpg",
+            "Puri": "Puri.jpg",
+            "Upma": "Upma.jpg",
+            "Rava Dosa": "Rava Dosa.jpeg",
+            "Onion Uthappam": "Onion Uthappam.jpg",
+            "Paniyaram": "Paniyaram.jpg",
+            "Parotta": "parota.jpg"
+        };
+
+        // Fallback function creates colored text placeholder
+        const getFallbackImageUrl = (item) => {
+            let bgColor = "15803d"; // Green for Veg
+            if (item.category === "non-veg") bgColor = "dc2626"; // Red for Non-Veg
+            if (item.category === "tiffin") bgColor = "eab308"; // Yellow for Tiffins
+            
+            const encodedName = encodeURIComponent(item.name);
+            return `https://placehold.co/800x600/${bgColor}/ffffff?text=${encodedName}`;
+        };
+
+        // Main image URL generator
+        const generateImageUrl = (item) => {
+            if (specificImages[item.name]) {
+                return encodeURI(specificImages[item.name]); // Return local filename
+            }
+            return getFallbackImageUrl(item);
+        };
+
+        // --- 2. Menu Data ---
+        const menuData = [
+            // Veg
+            { id: 1, name: "Veg Biryani", category: "veg", price: 220, description: "Aromatic basmati rice cooked with mixed vegetables and rich traditional spices." },
+            { id: 2, name: "Bisi Bele Bath", category: "veg", price: 180, description: "Karnataka special spicy blend of rice, lentils, vegetables and aromatic spices." },
+            { id: 3, name: "Avial", category: "veg", price: 160, description: "Kerala delicacy of mixed vegetables cooked in a coconut and yogurt paste." },
+            { id: 4, name: "Sambar Rice", category: "veg", price: 140, description: "Comforting rice mixed with tangy lentil stew and vegetables, served with papad." },
+            { id: 5, name: "Tamarind Rice", category: "veg", price: 130, description: "Tangy and spicy rice preparation flavoured with tamarind extract and peanuts." },
+            { id: 6, name: "Lemon Rice", category: "veg", price: 130, description: "Zesty lemon flavored rice tempered with mustard seeds, curry leaves and lentils." },
+            { id: 7, name: "Puliyogare", category: "veg", price: 140, description: "Traditional temple-style tamarind rice with a rich blend of roasted spices." },
+            { id: 8, name: "Pongal", category: "veg", price: 120, description: "Savory porridge made of rice and moong dal, tempered with black pepper and ghee." },
+            { id: 9, name: "Veg Kurma", category: "veg", price: 170, description: "Mixed vegetables simmered in a rich coconut and cashew nut gravy." },
+            { id: 10, name: "Gutti Vankaya Kura", category: "veg", price: 190, description: "Andhra style stuffed baby eggplants cooked in a spicy, nutty gravy." },
+            { id: 11, name: "Mirchi Ka Salan", category: "veg", price: 160, description: "Hyderabadi side dish made with large green chilies in a peanut and sesame gravy." },
+            { id: 12, name: "Cabbage Poriyal", category: "veg", price: 110, description: "Simple and healthy stir-fry of cabbage with freshly grated coconut." },
+            { id: 13, name: "Beetroot Thoran", category: "veg", price: 120, description: "Kerala style dry vegetable dish made with finely chopped beetroot and coconut." },
+            { id: 14, name: "Ennai Kathirikai", category: "veg", price: 180, description: "Tamil Nadu style tender brinjals cooked in a tangy tamarind and spice curry." },
+            { id: 15, name: "Keerai Masiyal", category: "veg", price: 140, description: "Mashed spinach cooked with garlic, cumin, and mild spices." },
+            { id: 16, name: "Pesarattu Upma", category: "veg", price: 160, description: "Green gram crepe served with a filling of savory semolina upma inside." },
+            { id: 17, name: "Veg Chettinad", category: "veg", price: 200, description: "Spicy and aromatic mixed vegetable curry made with freshly roasted Chettinad spices." },
+            { id: 18, name: "Coconut Rice", category: "veg", price: 140, description: "Mildly spiced rice tossed with fresh grated coconut and tempered with cashews." },
+            { id: 19, name: "Curd Rice", category: "veg", price: 120, description: "Soothing yogurt rice tempered with mustard seeds, curry leaves, and pomegranate." },
+            { id: 20, name: "Tomato Rice", category: "veg", price: 130, description: "Tangy and spicy rice cooked with ripe tomatoes and traditional whole spices." },
+
+            // Non-Veg
+            { id: 21, name: "Chicken Chettinad", category: "non-veg", price: 280, description: "Fiery South Indian chicken curry made with fresh ground pepper and aromatic spices." },
+            { id: 22, name: "Mutton Sukka", category: "non-veg", price: 350, description: "Dry mutton preparation coated with a thick, spicy, and peppery masala." },
+            { id: 23, name: "Chicken 65", category: "non-veg", price: 240, description: "Deep-fried spicy chicken appetizer originating from Hotel Buhari, Chennai." },
+            { id: 24, name: "Fish Curry", category: "non-veg", price: 320, description: "Homestyle fish curry simmered in a tangy tamarind and tomato based gravy." },
+            { id: 25, name: "Prawn Ghee Roast", category: "non-veg", price: 380, description: "Mangalorean delicacy of prawns roasted in pure ghee and fiery red chili paste." },
+            { id: 26, name: "Andhra Chilli Chicken", category: "non-veg", price: 260, description: "Extremely spicy chicken stir-fry made with slit green chilies and soy sauce." },
+            { id: 27, name: "Hyderabadi Chicken Biryani", category: "non-veg", price: 320, description: "World-famous fragrant layered rice cooked with marinated chicken and saffron." },
+            { id: 28, name: "Mutton Biryani", category: "non-veg", price: 380, description: "Tender chunks of mutton cooked with fragrant basmati rice and dum spices." },
+            { id: 29, name: "Nethili Fry", category: "non-veg", price: 220, description: "Crispy fried anchovies marinated in spicy South Indian masala." },
+            { id: 30, name: "Chicken Salna", category: "non-veg", price: 180, description: "Thin, aromatic street-style chicken gravy, perfect accompaniment for parottas." },
+            { id: 31, name: "Mutton Kola Urundai", category: "non-veg", price: 290, description: "Crispy fried meatballs made from minced mutton and roasted gram flour." },
+            { id: 32, name: "Meen Moilee", category: "non-veg", price: 340, description: "Kerala style mild and flavorful fish stew cooked in creamy coconut milk." },
+            { id: 33, name: "Kerala Beef Fry", category: "non-veg", price: 310, description: "Spicy and dry beef roast with coconut slivers, curry leaves, and black pepper." },
+            { id: 34, name: "Chicken Ghee Roast", category: "non-veg", price: 330, description: "Classic Mangalorean chicken dish roasted in generous amounts of desi ghee." },
+            { id: 35, name: "Natu Kodi Pulusu", category: "non-veg", price: 360, description: "Traditional Andhra country chicken curry made with rustic local spices." },
+            { id: 36, name: "Royyala Iguru", category: "non-veg", price: 370, description: "Andhra style semi-dry prawn curry cooked with onions, tomatoes, and spices." },
+            { id: 37, name: "Chepala Pulusu", category: "non-veg", price: 310, description: "Authentic Nellore style fish curry cooked in a rich, tangy tamarind sauce." },
+            { id: 38, name: "Karikudi Chicken", category: "non-veg", price: 290, description: "Spicy chicken curry from the Chettinad region, known for its bold flavors." },
+            { id: 39, name: "Malabar Fish Curry", category: "non-veg", price: 330, description: "Tangy coconut-based fish curry flavored with kokum (kudampuli)." },
+            { id: 40, name: "Egg Roast", category: "non-veg", price: 160, description: "Boiled eggs roasted in a spicy onion and tomato masala, a Kerala favorite." },
+
+            // Tiffins
+            { id: 41, name: "Idli", category: "tiffin", price: 60, description: "Soft, fluffy steamed cakes made from fermented rice and lentil batter." },
+            { id: 42, name: "Dosa", category: "tiffin", price: 80, description: "Thin, crispy crepe made from fermented rice and lentil batter." },
+            { id: 43, name: "Masala Dosa", category: "tiffin", price: 110, description: "Crispy dosa stuffed with a savory spiced potato filling." },
+            { id: 44, name: "Vada", category: "tiffin", price: 70, description: "Crispy, deep-fried savory donut made from urad dal batter." },
+            { id: 45, name: "Puri", category: "tiffin", price: 90, description: "Deep-fried, puffed unleavened Indian bread, served with potato masala." },
+            { id: 46, name: "Upma", category: "tiffin", price: 70, description: "Savory semolina porridge cooked with vegetables and mild spices." },
+            { id: 47, name: "Rava Dosa", category: "tiffin", price: 120, description: "Crispy and porous dosa made from semolina, rice flour, and cumin." },
+            { id: 48, name: "Onion Uthappam", category: "tiffin", price: 110, description: "Thick, soft pancake topped with finely chopped onions, chilies, and cilantro." },
+            { id: 49, name: "Paniyaram", category: "tiffin", price: 90, description: "Small, round dumplings made from fermented batter, cooked in a special pan." },
+            { id: 50, name: "Mysore Masala Dosa", category: "tiffin", price: 140, description: "Crispy dosa smeared with spicy red chutney and stuffed with potato masala." },
+            { id: 51, name: "Paper Roast", category: "tiffin", price: 130, description: "Extra-large, paper-thin and super crispy dosa." },
+            { id: 52, name: "Ghee Roast Dosa", category: "tiffin", price: 150, description: "Crispy dosa roasted generously with pure desi ghee for an aromatic flavor." },
+            { id: 53, name: "Rava Idli", category: "tiffin", price: 80, description: "Steamed semolina cakes tempered with mustard, cashews, and curry leaves." },
+            { id: 54, name: "Semiya Upma", category: "tiffin", price: 70, description: "Quick and delicious upma made using roasted vermicelli and vegetables." },
+            { id: 55, name: "Appam", category: "tiffin", price: 100, description: "Bowl-shaped thin pancakes made from fermented rice batter and coconut milk." },
+            { id: 56, name: "Idiyappam", category: "tiffin", price: 90, description: "Steamed rice noodles, traditionally served with sweetened coconut milk or curry." },
+            { id: 57, name: "Parotta", category: "tiffin", price: 80, description: "Flaky, layered flatbread made from maida, a staple in Kerala and Tamil Nadu." },
+            { id: 58, name: "Kothu Parotta", category: "tiffin", price: 160, description: "Shredded parotta minced on a griddle with vegetables, eggs, or meat gravy." },
+            { id: 59, name: "Bonda", category: "tiffin", price: 60, description: "Deep-fried spherical snack with a spicy potato filling and besan batter." },
+            { id: 60, name: "Uttapam", category: "tiffin", price: 90, description: "Thick South Indian pancake made from dosa batter, soft inside and crispy outside." }
+        ];
+
+        // Map images to data
+        menuData.forEach(item => {
+            item.image_url = generateImageUrl(item);
+            item.fallback_url = getFallbackImageUrl(item);
+        });
+
+        // --- STREAMING_CHUNK: jQuery Logic ---
+        
+        let cart = []; 
+
+        $(document).ready(function() {
+            renderMenu(menuData);
+
+            function handleSearch() {
+                const searchTerm = $(this).val().toLowerCase();
+                const activeCategory = $('.filter-btn.active').data('filter');
+                filterMenu(searchTerm, activeCategory);
+            }
+            $('#nav-search').on('input', handleSearch);
+            $('#mobile-search').on('input', handleSearch);
+
+            $('.filter-btn').on('click', function() {
+                $('.filter-btn').removeClass('active bg-spice-600 text-white').addClass('bg-white text-earth-600 border-earth-200');
+                $(this).removeClass('bg-white text-earth-600 border-earth-200').addClass('active bg-spice-600 text-white border-transparent');
+                
+                const activeCategory = $(this).data('filter');
+                const searchTerm = $('#nav-search').val().toLowerCase() || $('#mobile-search').val().toLowerCase();
+                filterMenu(searchTerm, activeCategory);
+            });
+
+            $('#clear-search-btn').on('click', function() {
+                $('#nav-search, #mobile-search').val('');
+                filterMenu('', $('.filter-btn.active').data('filter'));
+            });
+
+            $('#logo-btn').on('click', function() {
+                $('#nav-search, #mobile-search').val('');
+                $('[data-filter="all"]').click();
+            });
+
+            function filterMenu(searchTerm, category) {
+                const filteredData = menuData.filter(item => {
+                    const matchesSearch = item.name.toLowerCase().includes(searchTerm) || item.description.toLowerCase().includes(searchTerm);
+                    const matchesCategory = category === 'all' || item.category === category;
+                    return matchesSearch && matchesCategory;
+                });
+                renderMenu(filteredData);
+            }
+
+            // --- STREAMING_CHUNK: HTML Rendering ---
+            function renderMenu(items) {
+                const container = $('#menu-container');
+                container.empty();
+
+                if (items.length === 0) {
+                    $('#no-results').removeClass('hidden');
+                } else {
+                    $('#no-results').addClass('hidden');
+                    
+                    items.forEach(item => {
+                        let categoryBadge = '';
+                        if(item.category === 'veg') categoryBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-leaf-100 text-leaf-800"><span class="w-1.5 h-1.5 rounded-full bg-leaf-600 mr-1.5"></span>Veg</span>';
+                        if(item.category === 'non-veg') categoryBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800"><span class="w-1.5 h-1.5 rounded-full bg-red-600 mr-1.5"></span>Non-Veg</span>';
+                        if(item.category === 'tiffin') categoryBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500 mr-1.5"></span>Tiffin</span>';
+
+                        const cardHtml = `
+                            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-earth-100 card-hover flex flex-col h-full">
+                                <div class="relative h-48 overflow-hidden bg-earth-100">
+                                    <img src="${item.image_url}" alt="${item.name}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy">
+                                    <div class="absolute top-3 right-3">
+                                        ${categoryBadge}
+                                    </div>
+                                </div>
+                                <div class="p-5 flex flex-col flex-grow">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <h3 class="text-lg font-bold text-earth-800 leading-tight">${item.name}</h3>
+                                        <span class="text-lg font-bold text-spice-600 whitespace-nowrap ml-2">₹${item.price}</span>
+                                    </div>
+                                    <p class="text-sm text-earth-500 flex-grow mb-4">${item.description}</p>
+                                    <button data-id="${item.id}" class="add-to-cart-btn w-full bg-earth-100 hover:bg-spice-600 text-earth-700 hover:text-white font-medium py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center group">
+                                        <i class="fa-solid fa-plus mr-2 group-hover:rotate-90 transition-transform"></i> Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        container.append(cardHtml);
+                    });
+                }
+            }
+
+            // --- Cart Logic ---
+            $(document).on('click', '.add-to-cart-btn', function() {
+                const itemId = $(this).data('id');
+                const item = menuData.find(i => i.id === itemId);
+                
+                const btn = $(this);
+                const originalHtml = btn.html();
+                btn.html('<i class="fa-solid fa-check mr-2"></i> Added');
+                btn.removeClass('bg-earth-100 text-earth-700 hover:bg-spice-600').addClass('bg-leaf-500 text-white hover:bg-leaf-600');
+                
+                setTimeout(() => {
+                    btn.html(originalHtml);
+                    btn.removeClass('bg-leaf-500 text-white hover:bg-leaf-600').addClass('bg-earth-100 text-earth-700 hover:bg-spice-600');
+                }, 1500);
+
+                addToCart(item);
+            });
+
+            function addToCart(item) {
+                const existingItem = cart.find(cartItem => cartItem.id === item.id);
+                if (existingItem) existingItem.qty += 1;
+                else cart.push({ id: item.id, name: item.name, price: item.price, category: item.category, qty: 1 });
+                
+                updateCartUI();
+                showToast(`Added ${item.name} to cart`);
+            }
+
+            function updateCartUI() {
+                const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+                const counter = $('#cart-counter');
+                counter.text(totalItems);
+                
+                if (totalItems > 0) counter.removeClass('scale-0').addClass('scale-100');
+                else counter.removeClass('scale-100').addClass('scale-0');
+
+                const container = $('#cart-items-container');
+                container.empty();
+                let totalPrice = 0;
+
+                if (cart.length === 0) {
+                    container.append(`
+                        <div id="empty-cart-msg" class="text-center py-12 h-full flex flex-col justify-center items-center">
+                            <div class="w-20 h-20 bg-earth-50 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-basket-shopping text-3xl text-earth-300"></i>
+                            </div>
+                            <p class="text-earth-500 font-medium">Your cart is empty.</p>
+                        </div>
+                    `);
+                    $('#checkout-btn').prop('disabled', true);
+                } else {
+                    $('#checkout-btn').prop('disabled', false);
+                    cart.forEach(item => {
+                        totalPrice += item.price * item.qty;
+                        let dotColor = item.category === 'veg' ? 'bg-leaf-600' : (item.category === 'non-veg' ? 'bg-red-600' : 'bg-yellow-500');
+
+                        container.append(`
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-earth-100 shadow-sm">
+                                <div class="flex-grow pr-3">
+                                    <h4 class="text-sm font-bold text-earth-800 flex items-center">
+                                        <span class="w-2 h-2 rounded-full ${dotColor} mr-2 inline-block"></span>
+                                        ${item.name}
+                                    </h4>
+                                    <div class="text-spice-600 text-sm font-medium mt-1">₹${item.price}</div>
+                                </div>
+                                <div class="flex items-center space-x-2 bg-earth-50 rounded-lg p-1 border border-earth-200">
+                                    <button class="cart-minus-btn w-6 h-6 rounded flex items-center justify-center text-earth-500 hover:bg-white transition-all" data-id="${item.id}">
+                                        <i class="fa-solid fa-minus text-xs"></i>
+                                    </button>
+                                    <span class="text-sm font-bold w-4 text-center">${item.qty}</span>
+                                    <button class="cart-plus-btn w-6 h-6 rounded flex items-center justify-center text-earth-500 hover:bg-white transition-all" data-id="${item.id}">
+                                        <i class="fa-solid fa-plus text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `);
+                    });
+                }
+                $('#cart-total').text(totalPrice.toFixed(2));
+            }
+
+            $(document).on('click', '.cart-plus-btn', function() {
+                const item = cart.find(i => i.id === $(this).data('id'));
+                if(item) { item.qty += 1; updateCartUI(); }
+            });
+
+            $(document).on('click', '.cart-minus-btn', function() {
+                const itemIndex = cart.findIndex(i => i.id === $(this).data('id'));
+                if(itemIndex !== -1) {
+                    if (cart[itemIndex].qty > 1) cart[itemIndex].qty -= 1;
+                    else cart.splice(itemIndex, 1);
+                    updateCartUI();
+                }
+            });
+
+            function openCart() {
+                $('#cart-overlay').removeClass('hidden');
+                setTimeout(() => {
+                    $('#cart-overlay').removeClass('opacity-0');
+                    $('#cart-sidebar').addClass('open');
+                }, 10);
+                $('body').addClass('overflow-hidden');
+            }
+
+            function closeCart() {
+                $('#cart-sidebar').removeClass('open');
+                $('#cart-overlay').addClass('opacity-0');
+                setTimeout(() => {
+                    $('#cart-overlay').addClass('hidden');
+                    $('body').removeClass('overflow-hidden');
+                }, 300);
+            }
+
+            $('#cart-btn').on('click', openCart);
+            $('#close-cart-btn, #cart-overlay').on('click', closeCart);
+
+            $('#checkout-btn').on('click', function() {
+                closeCart();
+                cart = [];
+                updateCartUI();
+                setTimeout(() => showToast("Order Placed Successfully!", 'success', 4000), 300);
+            });
+
+            function showToast(message, type = 'default', duration = 3000) {
+                const toastId = 'toast-' + Date.now();
+                const icon = type === 'success' ? '<i class="fa-solid fa-sparkles text-spice-500 mr-3"></i>' : '<i class="fa-solid fa-circle-check text-leaf-500 mr-3"></i>';
+                
+                $('#toast-container').append(`
+                    <div id="${toastId}" class="toast bg-white border border-earth-100 shadow-lg rounded-lg p-4 flex items-center pointer-events-auto max-w-sm ml-auto">
+                        ${icon}
+                        <p class="text-earth-800 text-sm font-medium">${message}</p>
+                    </div>
+                `);
+                
+                setTimeout(() => $(`#${toastId}`).remove(), duration);
+            }
+        });
+    </script>
+</body>
+</html>
